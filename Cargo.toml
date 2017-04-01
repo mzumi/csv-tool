@@ -1,0 +1,15 @@
+[package]
+name = "csv-tools"
+version = "0.1.0"
+authors = ["mzumi <masazumi.m@gmail.com>"]
+
+[[bin]]
+bench = false
+path = "src/main.rs"
+name = "rc"
+
+[dependencies]
+csv = "*"
+regex = "*"
+clap = "*"
+pbr = "1.0.0-alpha.1"
