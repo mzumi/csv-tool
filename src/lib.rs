@@ -1,11 +1,13 @@
 extern crate csv;
 extern crate pbr;
 extern crate regex;
+extern crate prettytable;
 
 use regex::*;
 use std::fs;
 
 use pbr::{ProgressBar, Units};
+use prettytable::Table;
 
 #[derive(Debug)]
 pub struct CSVTools {}
@@ -17,6 +19,11 @@ impl CSVTools {
                                        source.to_owned(),
                                        output.to_owned());
         converter.run();
+    }
+
+    pub fn view(source: String) {
+        let viewer = Viewer::new(source.to_owned());
+        viewer.run();
     }
 }
 
@@ -65,5 +72,20 @@ impl Convertor {
             }
             pb.finish();
         }
+    }
+}
+
+#[derive(Debug)]
+struct Viewer {
+    source: String,
+}
+
+impl Viewer {
+    pub fn new(source: String) -> Self {
+        Viewer { source: source }
+    }
+    pub fn run(&self) {
+        let table = Table::from_csv_file(&self.source).unwrap();
+        table.printstd();
     }
 }
