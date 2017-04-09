@@ -34,7 +34,19 @@ fn main() {
             .arg(Arg::with_name("INPUT")
                 .help("Sets the input file to use")
                 .required(true)
-                .index(1)))
+                .index(1))
+            .arg(Arg::with_name("column_indexes")
+                .short("c")
+                .long("colums")
+                .help("Sets the rows indexes")
+                .use_delimiter(true)
+                .takes_value(true))
+            .arg(Arg::with_name("row_indexes")
+                .short("r")
+                .long("rows")
+                .help("Sets the colums indexes")
+                .use_delimiter(true)
+                .takes_value(true)))
         .get_matches();
 
     if let Some(matches) = matches.subcommand_matches("convert") {
@@ -47,8 +59,12 @@ fn main() {
                           to.to_owned(),
                           input.to_owned(),
                           output.to_owned());
+
     } else if let Some(matches) = matches.subcommand_matches("view") {
         let input = matches.value_of("INPUT").unwrap();
-        CSVTools::view(input.to_owned());
+        let column_indexes = matches.values_of("column_indexes").map(|i| i.collect::<Vec<_>>());
+        let rows_indexes = matches.values_of("row_indexes").map(|i| i.collect::<Vec<_>>());
+
+        CSVTools::view(input.to_owned(), rows_indexes, column_indexes);
     }
 }
